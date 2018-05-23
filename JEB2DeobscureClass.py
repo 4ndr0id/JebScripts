@@ -55,35 +55,36 @@ class JEB2AutoRename(Runnable):
 
                     # print(clazz.getName(True), sourceIndex, sourceStr, clazz)
                     if clazz.getName(True) != sourceStr:
-                        self.comment_class(unit, clazz, clazz.getName(True))  # Backup origin clazz name to comment
+#                         self.comment_class(unit, clazz, clazz.getName(True))  # Backup origin clazz name to comment
                         self.rename_class(unit, clazz, sourceStr, True)  # Rename to source name
 
     def rename_class(self, unit, originClazz, sourceName, isBackup):
         actCtx = ActionContext(unit, Actions.RENAME, originClazz.getItemId(), originClazz.getAddress())
         actData = ActionRenameData()
-        actData.setNewName(sourceName)
+        newName = '%s___%s' % (sourceName,originClazz.getName(True))
+        actData.setNewName(newName)
 
         if unit.prepareExecution(actCtx, actData):
             try:
                 result = unit.executeAction(actCtx, actData)
                 if result:
-                    print('rename to %s success!' % sourceName)
+                    print('rename to %s success!' % newName)
                 else:
-                    print('rename to %s failed!' % sourceName)
+                    print('rename to %s failed!' % newName)
             except Exception, e:
                 print (Exception, e)
 
-    def comment_class(self, unit, originClazz, commentStr):
-        actCtx = ActionContext(unit, Actions.COMMENT, originClazz.getItemId(), originClazz.getAddress())
-        actData = ActionCommentData()
-        actData.setNewComment(commentStr)
+#     def comment_class(self, unit, originClazz, commentStr):
+#         actCtx = ActionContext(unit, Actions.COMMENT, originClazz.getItemId(), originClazz.getAddress())
+#         actData = ActionCommentData()
+#         actData.setNewComment(commentStr)
 
-        if unit.prepareExecution(actCtx, actData):
-            try:
-                result = unit.executeAction(actCtx, actData)
-                if result:
-                    print('comment to %s success!' % commentStr)
-                else:
-                    print('comment to %s failed!' % commentStr)
-            except Exception, e:
-                print (Exception, e)
+#         if unit.prepareExecution(actCtx, actData):
+#             try:
+#                 result = unit.executeAction(actCtx, actData)
+#                 if result:
+#                     print('comment to %s success!' % commentStr)
+#                 else:
+#                     print('comment to %s failed!' % commentStr)
+#             except Exception, e:
+#                 print (Exception, e)
